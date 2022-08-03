@@ -26,6 +26,8 @@ const PrimarySearchAppBar = ({ totalItems }) => {
           </Badge>
         </IconButton>
         <p>Cart</p>
+        <IconButton component={Link} to="/logout" arial-labe="Log" color="inherit">
+        </IconButton>
       </MenuItem>
     </Menu>
   );
@@ -42,6 +44,7 @@ const PrimarySearchAppBar = ({ totalItems }) => {
           <div className={classes.button}>
             <IconButton component={Link} to="/cart" aria-label="Show cart items" color="inherit">
               <Badge badgeContent={totalItems} color="secondary">
+                   
                 <ShoppingCart />
               </Badge>
             </IconButton>
@@ -50,6 +53,7 @@ const PrimarySearchAppBar = ({ totalItems }) => {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
+      
     </>
   );
 };

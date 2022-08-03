@@ -1,34 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container, Typography, Button, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import StoreContext from '../Store/Context';
 
 import CartItem from './CartItem/CartItem';
 import useStyles from './styles';
 
+
 const Cart = ({ cart, onUpdateCartQty, onRemoveFromCart, onEmptyCart }) => {
   const classes = useStyles();
+  const { cliente } = useContext(StoreContext);
 
-  const handleEmptyCart = () => onEmptyCart();
+  const handleEmptyCart = () => onEmptyCart(cliente);
 
   const renderEmptyCart = () => (
     <Typography variant="subtitle1">Você não possui nenhum item no carrinho T.T,
       <Link className={classes.link} to="/"> comece adicionando alguns itens!</Link>!
     </Typography>
   );
-
-  if (!cart.line_items) return 'Loading';
+  if (!cart) return 'Loading';
 
   const renderCart = () => (
     <>
       <Grid container spacing={3}>
-        {cart.line_items.map((lineItem) => (
-          <Grid item xs={12} sm={4} key={lineItem.id}>
-            <CartItem item={lineItem} onUpdateCartQty={onUpdateCartQty} onRemoveFromCart={onRemoveFromCart} />
+        {cart.map((item) => (
+          <Grid item xs={12} sm={4} key={item.id_produto}>
+            <CartItem item={item} onUpdateCartQty={onUpdateCartQty} onRemoveFromCart={onRemoveFromCart} />
           </Grid>
         ))}
       </Grid>
       <div className={classes.cardDetails}>
-        <Typography variant="h4">Subtotal: {cart.subtotal.formatted_with_symbol}</Typography>
+        <Typography variant="h4">Subtotal: {cart.valor_produto}</Typography>
         <div>
           <Button className={classes.emptyButton} size="large" type="button" variant="contained" color="secondary" onClick={handleEmptyCart}>Vaziar carrinho</Button>
           <Button className={classes.checkoutButton} component={Link} to="/checkout" size="large" type="button" variant="contained" color="primary">Comprar</Button>
@@ -41,7 +43,7 @@ const Cart = ({ cart, onUpdateCartQty, onRemoveFromCart, onEmptyCart }) => {
     <Container>
       <div className={classes.toolbar} />
       <Typography className={classes.title} variant="h3" gutterBottom>Seu carrinho de compras</Typography>
-      { !cart.line_items.length ? renderEmptyCart() : renderCart() }
+      { !cart.length ? renderEmptyCart() : renderCart() }
     </Container>
   );
 };
